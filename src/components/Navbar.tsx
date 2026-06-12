@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -20,59 +20,24 @@ const links = [
 ];
 
 const EASE = [0.32, 0.72, 0, 1] as const;
-const SPRING = { type: "spring" as const, stiffness: 220, damping: 30 };
 
-/** A nav link that nudges toward the cursor (magnetic) on hover. The label
- *  flips to white whenever the dark indicator pill is sitting under it. */
-function MagneticLink({
-  href,
-  label,
-  indicated,
-  active,
-}: {
-  href: string;
-  label: string;
-  indicated: boolean;
-  active: boolean;
-}) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const [d, setD] = useState({ x: 0, y: 0 });
-
+function ArrowIcon() {
   return (
-    <motion.span
-      className="relative block"
-      animate={{ x: d.x, y: d.y }}
-      transition={{ type: "spring", stiffness: 250, damping: 18, mass: 0.4 }}
-    >
-      <Link
-        ref={ref}
-        href={href}
-        aria-current={active ? "page" : undefined}
-        onMouseMove={(e) => {
-          const r = ref.current?.getBoundingClientRect();
-          if (!r) return;
-          setD({
-            x: (e.clientX - (r.left + r.width / 2)) * 0.25,
-            y: (e.clientY - (r.top + r.height / 2)) * 0.3,
-          });
-        }}
-        onMouseLeave={() => setD({ x: 0, y: 0 })}
-        className={cn(
-          "relative block rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
-          indicated ? "text-on-dark" : "text-slate hover:text-ink",
-        )}
-      >
-        <span className="relative z-10">{label}</span>
-      </Link>
-    </motion.span>
+    <svg width="15" height="15" viewBox="0 0 14 14" fill="none">
+      <path
+        d="M3 11L11 3M11 3H5M11 3V9"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hovered, setHovered] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
 
   // Normalize trailing slash so build-time and statically-served pathnames
   // agree (otherwise the active state mismatches on hydration, React #418).
@@ -81,22 +46,12 @@ export default function Navbar() {
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 24));
 
-  // Rest the sliding indicator on the active item only AFTER mount, so the
-  // server and first client render agree (no indicator on SSR).
-  useEffect(() => setMounted(true), []);
-  const indicator = hovered ?? (mounted ? pathname : null);
-
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4">
       <motion.nav
         initial={{ y: -16, opacity: 0 }}
-        animate={{
-          y: 0,
-          opacity: 1,
-          maxWidth: scrolled ? 880 : 1080,
-        }}
+        animate={{ y: 0, opacity: 1, maxWidth: scrolled ? 920 : 1080 }}
         transition={{ duration: 0.6, ease: EASE }}
-        onMouseLeave={() => setHovered(null)}
         className={cn(
           "mt-4 flex w-full items-center justify-between rounded-full py-2 pl-5 pr-2 transition-[background-color,box-shadow,backdrop-filter] duration-500",
           scrolled
@@ -108,50 +63,27 @@ export default function Navbar() {
           <AnimatedLogo className="h-10 md:h-11" />
         </Link>
 
-        <ul className="relative hidden items-center gap-1 lg:flex">
-          {links.map((l) => {
-            const isIndicated = indicator === l.href;
-            return (
-              <li
-                key={l.href}
-                className="relative"
-                onMouseEnter={() => setHovered(l.href)}
+        <ul className="hidden items-center gap-2 lg:flex">
+          {links.map((l) => (
+            <li key={l.href}>
+              <Link
+                href={l.href}
+                data-active={pathname === l.href}
+                aria-current={pathname === l.href ? "page" : undefined}
+                className="nav-link block rounded-full px-4 py-2 text-sm"
               >
-                {isIndicated && (
-                  <motion.span
-                    layoutId="nav-indicator"
-                    className="absolute inset-0 rounded-full bg-ink shadow-[0_6px_18px_-6px_rgba(31,31,31,0.55)]"
-                    transition={SPRING}
-                  />
-                )}
-                <MagneticLink
-                  href={l.href}
-                  label={l.label}
-                  indicated={isIndicated}
-                  active={pathname === l.href}
-                />
-              </li>
-            );
-          })}
+                {l.label}
+              </Link>
+            </li>
+          ))}
         </ul>
 
-        <div className="hidden items-center gap-2 lg:flex">
-          <Link
-            href="/contact"
-            className="group flex items-center gap-2 rounded-full bg-ink py-2 pl-4 pr-2 text-sm font-medium text-on-dark transition-transform duration-300 [transition-timing-function:var(--ease-spring-3)] hover:scale-[1.03] active:scale-[0.97]"
-          >
-            Try AumicFlow
-            <span className="flex size-7 items-center justify-center rounded-full bg-white/15 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M3 11L11 3M11 3H5M11 3V9"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
+        <div className="hidden items-center lg:flex">
+          <Link href="/contact" className="btn-get-started" aria-label="Try AumicFlow">
+            <span className="gsb-label">Try AumicFlow</span>
+            <i className="gsb-chev" aria-hidden>
+              <ArrowIcon />
+            </i>
           </Link>
         </div>
 
@@ -203,7 +135,10 @@ export default function Navbar() {
                   <Link
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="font-display text-5xl text-ink"
+                    className={cn(
+                      "font-display text-5xl",
+                      pathname === l.href ? "text-primary" : "text-ink",
+                    )}
                   >
                     {l.label}
                   </Link>
@@ -222,9 +157,12 @@ export default function Navbar() {
                 <Link
                   href="/contact"
                   onClick={() => setOpen(false)}
-                  className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-medium text-on-dark"
+                  className="btn-get-started"
                 >
-                  Try AumicFlow →
+                  <span className="gsb-label">Try AumicFlow</span>
+                  <i className="gsb-chev" aria-hidden>
+                    <ArrowIcon />
+                  </i>
                 </Link>
               </motion.li>
             </ul>
