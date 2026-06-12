@@ -70,7 +70,7 @@ export function ProductBg() {
       <div className="absolute inset-0" style={{ background: P.productTint }} />
       <motion.svg
         viewBox="-160 -160 320 320"
-        className="absolute right-[-6%] top-1/2 h-[150%] w-auto -translate-y-1/2"
+        className="absolute left-1/2 top-1/2 h-[155%] w-auto -translate-x-1/2 -translate-y-1/2"
         animate={{ rotate: 360 }}
         transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
       >
@@ -122,7 +122,7 @@ export function SolutionsBg() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
       <div className="absolute inset-0" style={{ background: P.solTint }} />
-      <svg viewBox="0 0 600 360" className="absolute right-0 top-0 h-full w-auto">
+      <svg viewBox="0 0 600 360" className="absolute left-1/2 top-1/2 h-[112%] w-auto -translate-x-1/2 -translate-y-1/2">
         <SketchDefs id="sk-sol" />
         <g fill="none" stroke={P.clay} strokeWidth="1.5" strokeLinecap="round" filter="url(#sk-sol)">
           <circle cx="470" cy="84" r="26" stroke={P.coral} />
@@ -160,7 +160,7 @@ export function PricingBg() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
       <div className="absolute inset-0" style={{ background: P.priceTint }} />
-      <svg viewBox="0 0 640 360" className="absolute bottom-0 right-0 h-[88%] w-auto">
+      <svg viewBox="0 0 640 360" className="absolute bottom-0 left-1/2 h-[90%] w-auto -translate-x-1/2">
         <SketchDefs id="sk-price" />
         <g fill="none" strokeWidth="1.3" strokeLinecap="round" filter="url(#sk-price)">
           {/* lily pads */}
@@ -212,33 +212,35 @@ export function CompanyBg() {
         className="absolute inset-x-0 bottom-0 h-[60%]"
         style={{ background: "radial-gradient(60% 100% at 50% 120%, rgba(255,170,90,0.22), transparent 70%)" }}
       />
-      <svg viewBox="0 0 1200 520" preserveAspectRatio="xMidYMax meet" className="absolute inset-0 h-full w-full">
+      {/* one shared centre at the viewBox origin so sun + rays always align */}
+      <svg viewBox="-220 -220 440 440" className="absolute left-1/2 top-[60%] h-[150%] w-auto -translate-x-1/2 -translate-y-1/2">
         <SketchDefs id="sk-co" />
         <motion.g
-          style={{ transformOrigin: "600px 520px" }}
+          style={{ transformOrigin: "center" }}
           animate={{ rotate: 360 }}
-          transition={{ duration: 210, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 220, repeat: Infinity, ease: "linear" }}
         >
           <g fill="none" stroke={P.violet} strokeWidth="1" filter="url(#sk-co)" opacity="0.6">
-            {Array.from({ length: 24 }).map((_, i) => (
-              <line key={i} x1="600" y1="520" x2="600" y2="120" transform={`rotate(${(180 / 23) * i - 90} 600 520)`} />
-            ))}
+            {Array.from({ length: 32 }).map((_, i) => {
+              const a = (Math.PI * 2 * i) / 32;
+              return <line key={i} x1={Math.cos(a) * 100} y1={Math.sin(a) * 100} x2={Math.cos(a) * 205} y2={Math.sin(a) * 205} />;
+            })}
           </g>
         </motion.g>
         <motion.circle
-          cx="600" cy="520" r="120"
-          fill="none" stroke={P.dawnSun} strokeWidth="2" filter="url(#sk-co)"
+          cx="0" cy="0" r="84"
+          fill="none" stroke={P.dawnSun} strokeWidth="2.4" filter="url(#sk-co)"
           style={{ transformBox: "fill-box", transformOrigin: "center" }}
           animate={{ scale: [1, 1.06, 1] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <g fill="none" strokeWidth="1.5" strokeLinecap="round" filter="url(#sk-co)">
-          <Diya x={300} y={470} />
-          <Diya x={430} y={486} />
-          <Diya x={770} y={486} />
-          <Diya x={900} y={470} />
-          <path d="M200 150 q 12 -8 24 0 q 12 -8 24 0" stroke={P.indigo} />
-          <path d="M980 120 q 10 -7 20 0 q 10 -7 20 0" stroke={P.indigo} />
+          <Diya x={-150} y={150} />
+          <Diya x={-58} y={182} />
+          <Diya x={58} y={182} />
+          <Diya x={150} y={150} />
+          <path d="M-180 -150 q 12 -8 24 0 q 12 -8 24 0" stroke={P.indigo} />
+          <path d="M150 -168 q 10 -7 20 0 q 10 -7 20 0" stroke={P.indigo} />
         </g>
       </svg>
     </div>
