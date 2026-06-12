@@ -1,4 +1,4 @@
-# AumicFlow — Website
+# AumicFlow.ai — Website
 
 Marketing site for **AumicFlow**, the Cultural Intelligence engine and Original
 Narrative Engine (ONE) for Bharat. "The megaphone for the Indian soul."
