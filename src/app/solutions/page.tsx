@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { SolutionsBg } from "@/components/backgrounds";
 import { FadeUp, Stagger, Item, HoverLift } from "@/components/motion";
 
 export const metadata: Metadata = {
@@ -101,8 +102,9 @@ export default function SolutionsPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-cream-light dot-grid border-b border-hairline-soft">
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-8 pt-32 pb-16 lg:pt-40 lg:pb-24">
+      <section className="relative overflow-hidden bg-cream-light border-b border-hairline-soft">
+        <SolutionsBg />
+        <div className="relative mx-auto max-w-[1280px] px-6 lg:px-8 pt-32 pb-16 lg:pt-40 lg:pb-24">
           <FadeUp>
             <Badge className="rounded-md h-auto px-2.5 py-1 text-[12px] font-semibold mb-6">
               Solutions
