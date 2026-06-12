@@ -223,30 +223,32 @@ function Diya({ x, y }: { x: number; y: number }) {
   );
 }
 export function CompanyBg() {
-  // sun rays fanning UP from the horizon centre (0,20) — static, so nothing
-  // can drift out of alignment; only the brand star spins in place.
-  const rays = Array.from({ length: 13 }).map((_, i) => {
-    const ang = (((i / 12) * 2 - 1) * 82 * Math.PI) / 180;
-    const dx = Math.sin(ang),
-      dy = -Math.cos(ang);
-    return { x1: dx * 92, y1: 20 + dy * 92, x2: dx * 188, y2: 20 + dy * 188 };
-  });
   const stars: [number, number, number][] = [
     [-250, -150, 8], [232, -176, 7], [-130, -205, 6],
     [150, -150, 7], [12, -218, 9], [-36, -118, 5],
   ];
+  // the AumicFlow asterisk: 8 bold rays, cardinals long, diagonals shorter
+  const mark = [
+    { a: 0, l: 96 },
+    { a: 90, l: 96 },
+    { a: 45, l: 66 },
+    { a: 135, l: 66 },
+  ];
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
       <div className="absolute inset-0" style={{ background: P.coTint }} />
-      {/* everything shares the horizon centre (0,20), centred + bottom-anchored */}
       <svg viewBox="-320 -250 640 290" preserveAspectRatio="xMidYMax meet" className="absolute inset-0 h-full w-full">
+        <defs>
+          <radialGradient id="co-glow">
+            <stop offset="0%" stopColor="rgba(250,82,15,0.18)" />
+            <stop offset="100%" stopColor="rgba(250,82,15,0)" />
+          </radialGradient>
+        </defs>
         <SketchDefs id="sk-co" />
-        {/* rays */}
-        <g fill="none" stroke={P.rays} strokeWidth="1" strokeLinecap="round" filter="url(#sk-co)">
-          {rays.map((r, i) => (
-            <line key={i} x1={r.x1} y1={r.y1} x2={r.x2} y2={r.y2} />
-          ))}
-        </g>
+
+        {/* soft dawn glow behind the mark */}
+        <circle cx="0" cy="20" r="170" fill="url(#co-glow)" />
+
         {/* twinkling brand stars in the sky */}
         {stars.map(([x, y, r], i) => (
           <motion.g
@@ -257,29 +259,25 @@ export function CompanyBg() {
             <Star cx={x} cy={y} r={r} color={P.starSoft} sw={1.4} />
           </motion.g>
         ))}
-        {/* the AumicFlow mark rising at the horizon: a breathing asterisk inside
-            a rotating ring with an orbiting satellite (just like the logo's "O") */}
-        <motion.g
-          style={{ transformBox: "fill-box", transformOrigin: "center" }}
-          animate={{ scale: [1, 1.07, 1] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <g filter="url(#sk-co)">
-            <Star cx={0} cy={20} r={54} color={P.star} sw={3} />
-          </g>
-        </motion.g>
+
+        {/* THE rising AumicFlow asterisk — the brand mark, rotating like the logo */}
         <motion.g
           style={{ transformBox: "fill-box", transformOrigin: "center" }}
           animate={{ rotate: 360 }}
-          transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
         >
-          {/* invisible sizer keeps the rotation centred on the horizon point */}
-          <circle cx={0} cy={20} r={80} fill="none" />
-          <g filter="url(#sk-co)">
-            <circle cx={0} cy={20} r={74} fill="none" stroke={P.rays} strokeWidth="1.5" />
-            <circle cx={0} cy={20 - 74} r={5} fill={P.star} />
+          <g
+            filter="url(#sk-co)"
+            stroke={P.star}
+            strokeWidth="9"
+            strokeLinecap="round"
+          >
+            {mark.map((ry, i) => (
+              <line key={i} transform={`rotate(${ry.a} 0 20)`} x1="0" y1={20 - ry.l} x2="0" y2={20 + ry.l} />
+            ))}
           </g>
         </motion.g>
+
         {/* diyas along the horizon */}
         <g fill="none" strokeWidth="1.5" strokeLinecap="round" filter="url(#sk-co)">
           <Diya x={-210} y={28} />
