@@ -95,7 +95,7 @@ export default function Footer() {
           <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
             {/* Brand + newsletter */}
             <div className="md:col-span-2 lg:col-span-1">
-              <AnimatedLogo className="h-10" />
+              <AnimatedLogo className="h-14 md:h-16" />
               <p className="mt-4 max-w-[30ch] font-display text-xl italic text-ink-tint">
                 The megaphone for the Indian soul.
               </p>

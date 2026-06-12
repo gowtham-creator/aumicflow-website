@@ -36,14 +36,32 @@ const P = {
   rose: "rgba(198,118,140,0.52)",
   petalGold: "rgba(214,160,96,0.55)",
   jade: "rgba(96,166,138,0.55)",
-  // Company — indigo dawn (cool sky, warm sun)
-  coTint: "linear-gradient(0deg, rgba(116,106,176,0.34) 0%, rgba(150,138,192,0.12) 42%, transparent 76%)",
-  dawnSun: "rgba(232,140,92,0.6)",
-  violet: "rgba(132,124,184,0.52)",
+  // Company — rose-gold storytelling dawn, brand star rising
+  coTint: "radial-gradient(82% 96% at 50% 104%, rgba(255,176,96,0.34) 0%, rgba(255,148,138,0.16) 44%, transparent 78%)",
+  star: "rgba(250,82,15,0.6)",
+  rays: "rgba(224,150,86,0.42)",
   amber: "rgba(206,142,80,0.55)",
-  flame: "rgba(236,150,80,0.78)",
-  indigo: "rgba(108,118,164,0.45)",
+  flame: "rgba(236,150,80,0.8)",
+  starSoft: "rgba(228,150,96,0.5)",
 };
+
+/* The AumicFlow asterisk mark, drawn as an 8-ray sparkle (cardinal rays long,
+   diagonals short) so it reads as the brand star. */
+function Star({ cx, cy, r, color, sw = 2 }: { cx: number; cy: number; r: number; color: string; sw?: number }) {
+  const rays = [
+    { a: 0, len: r },
+    { a: 90, len: r },
+    { a: 45, len: r * 0.58 },
+    { a: 135, len: r * 0.58 },
+  ];
+  return (
+    <g stroke={color} strokeWidth={sw} strokeLinecap="round">
+      {rays.map((ry, i) => (
+        <line key={i} transform={`rotate(${ry.a} ${cx} ${cy})`} x1={cx} y1={cy - ry.len} x2={cx} y2={cy + ry.len} />
+      ))}
+    </g>
+  );
+}
 
 function CopyFade() {
   return (
@@ -205,42 +223,69 @@ function Diya({ x, y }: { x: number; y: number }) {
   );
 }
 export function CompanyBg() {
+  // sun rays fanning UP from the horizon centre (0,20) — static, so nothing
+  // can drift out of alignment; only the brand star spins in place.
+  const rays = Array.from({ length: 13 }).map((_, i) => {
+    const ang = (((i / 12) * 2 - 1) * 82 * Math.PI) / 180;
+    const dx = Math.sin(ang),
+      dy = -Math.cos(ang);
+    return { x1: dx * 92, y1: 20 + dy * 92, x2: dx * 188, y2: 20 + dy * 188 };
+  });
+  const stars: [number, number, number][] = [
+    [-250, -150, 8], [232, -176, 7], [-130, -205, 6],
+    [150, -150, 7], [12, -218, 9], [-36, -118, 5],
+  ];
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
       <div className="absolute inset-0" style={{ background: P.coTint }} />
-      <div
-        className="absolute inset-x-0 bottom-0 h-[60%]"
-        style={{ background: "radial-gradient(60% 100% at 50% 120%, rgba(255,170,90,0.22), transparent 70%)" }}
-      />
-      {/* one shared centre at the viewBox origin so sun + rays always align */}
-      <svg viewBox="-220 -220 440 440" className="absolute left-1/2 top-[60%] h-[150%] w-auto -translate-x-1/2 -translate-y-1/2">
+      {/* everything shares the horizon centre (0,20), centred + bottom-anchored */}
+      <svg viewBox="-320 -250 640 290" preserveAspectRatio="xMidYMax meet" className="absolute inset-0 h-full w-full">
         <SketchDefs id="sk-co" />
+        {/* rays */}
+        <g fill="none" stroke={P.rays} strokeWidth="1" strokeLinecap="round" filter="url(#sk-co)">
+          {rays.map((r, i) => (
+            <line key={i} x1={r.x1} y1={r.y1} x2={r.x2} y2={r.y2} />
+          ))}
+        </g>
+        {/* twinkling brand stars in the sky */}
+        {stars.map(([x, y, r], i) => (
+          <motion.g
+            key={i}
+            animate={{ opacity: [0.2, 0.85, 0.2] }}
+            transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut", delay: (i % 4) * 0.5 }}
+          >
+            <Star cx={x} cy={y} r={r} color={P.starSoft} sw={1.4} />
+          </motion.g>
+        ))}
+        {/* the AumicFlow mark rising at the horizon: a breathing asterisk inside
+            a rotating ring with an orbiting satellite (just like the logo's "O") */}
         <motion.g
-          style={{ transformOrigin: "center" }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 220, repeat: Infinity, ease: "linear" }}
+          style={{ transformBox: "fill-box", transformOrigin: "center" }}
+          animate={{ scale: [1, 1.07, 1] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         >
-          <g fill="none" stroke={P.violet} strokeWidth="1" filter="url(#sk-co)" opacity="0.6">
-            {Array.from({ length: 32 }).map((_, i) => {
-              const a = (Math.PI * 2 * i) / 32;
-              return <line key={i} x1={Math.cos(a) * 100} y1={Math.sin(a) * 100} x2={Math.cos(a) * 205} y2={Math.sin(a) * 205} />;
-            })}
+          <g filter="url(#sk-co)">
+            <Star cx={0} cy={20} r={54} color={P.star} sw={3} />
           </g>
         </motion.g>
-        <motion.circle
-          cx="0" cy="0" r="84"
-          fill="none" stroke={P.dawnSun} strokeWidth="2.4" filter="url(#sk-co)"
+        <motion.g
           style={{ transformBox: "fill-box", transformOrigin: "center" }}
-          animate={{ scale: [1, 1.06, 1] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
+          animate={{ rotate: 360 }}
+          transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+        >
+          {/* invisible sizer keeps the rotation centred on the horizon point */}
+          <circle cx={0} cy={20} r={80} fill="none" />
+          <g filter="url(#sk-co)">
+            <circle cx={0} cy={20} r={74} fill="none" stroke={P.rays} strokeWidth="1.5" />
+            <circle cx={0} cy={20 - 74} r={5} fill={P.star} />
+          </g>
+        </motion.g>
+        {/* diyas along the horizon */}
         <g fill="none" strokeWidth="1.5" strokeLinecap="round" filter="url(#sk-co)">
-          <Diya x={-150} y={150} />
-          <Diya x={-58} y={182} />
-          <Diya x={58} y={182} />
-          <Diya x={150} y={150} />
-          <path d="M-180 -150 q 12 -8 24 0 q 12 -8 24 0" stroke={P.indigo} />
-          <path d="M150 -168 q 10 -7 20 0 q 10 -7 20 0" stroke={P.indigo} />
+          <Diya x={-210} y={28} />
+          <Diya x={-104} y={28} />
+          <Diya x={104} y={28} />
+          <Diya x={210} y={28} />
         </g>
       </svg>
     </div>

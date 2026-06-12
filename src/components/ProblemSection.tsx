@@ -127,8 +127,8 @@ export default function ProblemSection() {
                     <p className="font-display text-6xl leading-none tracking-[-2px] text-on-dark lg:text-7xl">
                       <CountUp to={500} suffix="M+" />
                     </p>
-                    <p className="mt-3 max-w-[34ch] text-sm leading-relaxed text-on-dark-muted">
-                      vernacular voices the algorithm never learned to hear —
+                    <p className="mt-3 max-w-[34ch] text-sm leading-relaxed text-cream/80">
+                      vernacular voices the algorithm never learned to hear:
                       every dialect, every silence between the words.
                     </p>
                   </div>
@@ -207,7 +207,7 @@ export default function ProblemSection() {
                   <h3 className="mt-5 text-base font-medium text-on-dark">
                     {p.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-on-dark-muted">
+                  <p className="mt-2 text-sm leading-relaxed text-cream/70">
                     {p.body}
                   </p>
                 </div>
