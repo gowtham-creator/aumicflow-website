@@ -44,11 +44,11 @@ export default function Preloader() {
 
     if (reduced.current) {
       setPhase("logo");
-      timers.push(setTimeout(() => { seen(); setShow(false); }, 3500));
+      timers.push(setTimeout(() => { seen(); setShow(false); }, 2500));
     } else {
       timers.push(setTimeout(() => setPhase("logo"), 1850));
-      // logo holds ~2s longer before the curtain lift
-      timers.push(setTimeout(() => { seen(); setShow(false); }, 5300));
+      // logo holds ~1s longer before the curtain lift
+      timers.push(setTimeout(() => { seen(); setShow(false); }, 4300));
     }
     return () => {
       timers.forEach(clearTimeout);
@@ -140,7 +140,7 @@ export default function Preloader() {
               }}
               initial={{ width: "0%" }}
               animate={{ width: "100%" }}
-              transition={{ duration: 4.9, ease: [0.4, 0, 0.2, 1] }}
+              transition={{ duration: 3.9, ease: [0.4, 0, 0.2, 1] }}
             />
           </div>
         </motion.div>
