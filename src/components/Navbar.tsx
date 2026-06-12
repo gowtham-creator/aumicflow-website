@@ -108,7 +108,7 @@ export default function Navbar() {
         </button>
       </motion.nav>
 
-      {/* Full-screen glass overlay menu */}
+      {/* Full-screen glass overlay menu (above the bar, with its own close) */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -116,10 +116,34 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: EASE }}
-            className="glass-cream fixed inset-0 z-40 flex flex-col justify-center px-8 lg:hidden"
+            className="glass-cream fixed inset-0 z-[60] flex flex-col lg:hidden"
             style={{ backdropFilter: "blur(28px)" }}
           >
-            <ul className="space-y-2">
+            {/* top bar: logo + clear close (X) button */}
+            <div className="flex items-center justify-between px-6 pt-6">
+              <AnimatedLogo className="h-9" />
+              <button
+                type="button"
+                aria-label="Close menu"
+                onClick={() => setOpen(false)}
+                className="flex size-11 items-center justify-center rounded-full border border-beige-deep bg-white/70 text-ink shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] transition-colors hover:bg-white active:scale-95"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                >
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            </div>
+
+            {/* links, vertically centered */}
+            <ul className="flex flex-1 flex-col justify-center gap-2 px-8">
               {links.map((l, i) => (
                 <motion.li
                   key={l.href}
@@ -152,7 +176,7 @@ export default function Navbar() {
                   duration: 0.5,
                   ease: EASE,
                 }}
-                className="pt-6"
+                className="pt-8"
               >
                 <Link
                   href="/contact"
