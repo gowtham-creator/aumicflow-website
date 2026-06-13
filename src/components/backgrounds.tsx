@@ -116,50 +116,32 @@ export function ProductBg() {
   );
 }
 
-/* ──────────  SOLUTIONS — folk walking right, endlessly, on a moving earth ── */
-function WalkingWarli({ x, s = 1, delay = 0 }: { x: number; s?: number; delay?: number }) {
-  // a Warli figure mid-stride, facing right, with a gentle walking bob
+/* ──────────  SOLUTIONS — folk walking right across a STILL land ────────── */
+function WalkerFigure({ delay = 0 }: { delay?: number }) {
+  // a Warli figure mid-stride, facing right, bobbing as it walks
   return (
-    <g transform={`translate(${x} 0) scale(${s})`}>
-      <motion.g
-        animate={{ y: [0, -2.6, 0] }}
-        transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut", delay }}
-      >
-        <circle cx="2" cy="-38" r="4.4" />
-        <path d="M-4 -30 L8 -30 L2 -20 Z" />
-        <path d="M2 -20 L-4 -8 L8 -8 Z" />
-        <path d="M-2 -27 L-10 -21" />
-        <path d="M6 -27 L14 -31" />
-        <path d="M2 -8 L-6 2" />
-        <path d="M2 -8 L11 1" />
-      </motion.g>
-    </g>
-  );
-}
-function WalkTile() {
-  const people = [60, 180, 300, 420, 540, 660];
-  const tufts = [28, 104, 232, 358, 486, 624, 694];
-  return (
-    <svg viewBox="0 0 720 240" className="h-full w-auto">
-      <SketchDefs id="sk-sol" />
-      <g fill="none" strokeLinecap="round" filter="url(#sk-sol)">
-        {/* the earth: a gentle curved line (matches at both tile edges) */}
-        <path d="M0 205 Q 360 190 720 205" stroke={P.earth} strokeWidth="1.8" />
-        {/* grass tufts make the moving ground legible */}
-        {tufts.map((tx, i) => (
-          <path key={i} d={`M${tx} 204 l 0 -6`} stroke={P.sage} strokeWidth="1.4" />
-        ))}
-        {/* the folk, walking */}
-        <g stroke={P.clay} strokeWidth="1.6" transform="translate(0 205)">
-          {people.map((px, i) => (
-            <WalkingWarli key={i} x={px} s={0.94 + (i % 3) * 0.08} delay={(i % 4) * 0.2} />
-          ))}
-        </g>
-      </g>
-    </svg>
+    <motion.svg
+      viewBox="0 0 32 48"
+      className="h-11 w-auto shrink-0"
+      fill="none"
+      stroke={P.clay}
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      animate={{ y: [0, -2.6, 0] }}
+      transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut", delay }}
+    >
+      <circle cx="16" cy="6" r="4.3" />
+      <path d="M10 14 L22 14 L16 25 Z" />
+      <path d="M16 25 L10 35 L22 35 Z" />
+      <path d="M12 17 L4 23" />
+      <path d="M20 17 L28 13" />
+      <path d="M16 35 L9 46" />
+      <path d="M16 35 L25 45" />
+    </motion.svg>
   );
 }
 export function SolutionsBg() {
+  const set = Array.from({ length: 8 });
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
       <div className="absolute inset-0" style={{ background: P.solTint }} />
@@ -174,16 +156,31 @@ export function SolutionsBg() {
           })}
         </g>
       </svg>
-      {/* endless rightward procession */}
-      <div className="absolute inset-x-0 bottom-0 h-[58%] overflow-hidden">
-        <motion.div
-          className="flex h-full w-max"
-          animate={{ x: ["-50%", "0%"] }}
-          transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
-        >
-          <WalkTile />
-          <WalkTile />
-        </motion.div>
+      {/* STILL land + grass; only the people move across it */}
+      <div className="absolute inset-x-0 bottom-[13%]">
+        <div
+          className="absolute inset-x-0 bottom-0 h-[2px] rounded-full"
+          style={{ background: P.earth }}
+        />
+        <div
+          className="absolute inset-x-0 bottom-[1px] h-2.5"
+          style={{
+            backgroundImage: `repeating-linear-gradient(90deg, transparent 0 56px, ${P.sage} 56px 57px, transparent 57px 58px)`,
+            WebkitMaskImage: "linear-gradient(0deg, black, transparent)",
+            maskImage: "linear-gradient(0deg, black, transparent)",
+          }}
+        />
+        <div className="absolute inset-x-0 bottom-0 overflow-hidden">
+          <motion.div
+            className="flex w-max items-end gap-20 pl-20"
+            animate={{ x: ["-50%", "0%"] }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          >
+            {[...set, ...set].map((_, i) => (
+              <WalkerFigure key={i} delay={(i % 4) * 0.2} />
+            ))}
+          </motion.div>
+        </div>
       </div>
       <CopyFade />
     </div>
