@@ -118,7 +118,7 @@ export default function ProblemSection() {
           <FadeUp delay={0.05} className="lg:col-span-2">
             <div className="glass-dark group relative h-full overflow-hidden rounded-[1.7rem] p-8 lg:p-10">
               <span
-                className="liquid-sheen pointer-events-none absolute inset-x-0 -top-1/2 h-full"
+                className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"
                 aria-hidden
               />
               <div className="relative flex h-full flex-col justify-between gap-8">

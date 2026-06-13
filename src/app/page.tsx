@@ -83,20 +83,21 @@ const engine = [
   },
 ];
 
-const marqueeItems = [
-  "Telugu",
-  "Hindi",
-  "Tamil",
-  "Bengali",
-  "Marathi",
-  "Punjabi",
-  "Malayalam",
-  "Kannada",
-  "Gujarati",
-  "Odia",
-  "22 languages",
-  "1,600+ dialects",
-  "9 rasas",
+// each language carries its own first letter, in its native script
+const marqueeItems: { name: string; glyph: string }[] = [
+  { name: "Telugu", glyph: "తె" },
+  { name: "Hindi", glyph: "हि" },
+  { name: "Tamil", glyph: "த" },
+  { name: "Bengali", glyph: "বা" },
+  { name: "Marathi", glyph: "म" },
+  { name: "Punjabi", glyph: "ਪੰ" },
+  { name: "Malayalam", glyph: "മ" },
+  { name: "Kannada", glyph: "ಕ" },
+  { name: "Gujarati", glyph: "ગુ" },
+  { name: "Odia", glyph: "ଓ" },
+  { name: "22 languages", glyph: "✳" },
+  { name: "1,600+ dialects", glyph: "✳" },
+  { name: "9 rasas", glyph: "✳" },
 ];
 
 export default function Home() {
@@ -175,11 +176,16 @@ export default function Home() {
         <Marquee duration={36}>
           {marqueeItems.map((item) => (
             <span
-              key={item}
+              key={item.name}
               className="flex items-center gap-12 whitespace-nowrap text-sm font-medium text-ink-tint"
             >
-              {item}
-              <span className="text-primary">✳</span>
+              {item.name}
+              <span
+                className="inline-flex h-6 min-w-6 items-center justify-center text-base leading-none text-primary"
+                aria-hidden
+              >
+                {item.glyph}
+              </span>
             </span>
           ))}
         </Marquee>
@@ -293,27 +299,36 @@ export default function Home() {
       <section className="bg-cream-light pb-20 lg:pb-28">
         <div className="mx-auto max-w-[1280px] px-6 lg:px-8">
           <FadeUp>
-            <div className="relative overflow-hidden rounded-[2rem] bg-[#0d1520] p-1.5">
-              <LiquidBlobs variant="dark" />
-              <div className="glass-dark relative overflow-hidden rounded-[calc(2rem-0.375rem)] px-8 py-16 text-center lg:py-20">
-                <span
-                  className="liquid-sheen pointer-events-none absolute inset-x-0 -top-1/2 h-full"
-                  aria-hidden
-                />
-                <h2 className="relative font-display text-4xl leading-[1.1] tracking-[-1px] text-on-dark md:text-5xl">
-                  The next chapter of Indian storytelling is{" "}
-                  <em className="text-sunshine-500">yours.</em>
-                </h2>
-                <p className="relative mx-auto mt-4 max-w-[52ch] text-lg text-on-dark-muted">
-                  From rickshaw drivers to film studios — AumicFlow meets every
-                  storyteller at their specific pain point.
-                </p>
-                <div className="relative mt-8 flex flex-wrap justify-center gap-3">
-                  <GlassButton href="/contact">Join the beta</GlassButton>
-                  <GlassButton href="/pricing" variant="ghost">
-                    See pricing
-                  </GlassButton>
-                </div>
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b1320] px-8 py-16 text-center shadow-[0_40px_90px_-40px_rgba(0,0,0,0.7)] lg:py-20">
+              {/* one focused warm glow instead of muddy blobs */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{ background: "radial-gradient(62% 130% at 50% 0%, rgba(250,82,15,0.22), transparent 60%)" }}
+              />
+              {/* fine star-field texture for sharpness */}
+              <div
+                className="pointer-events-none absolute inset-0 opacity-[0.07]"
+                style={{
+                  backgroundImage: "radial-gradient(circle, rgba(255,208,106,0.9) 1px, transparent 1.4px)",
+                  backgroundSize: "22px 22px",
+                }}
+              />
+              {/* crisp top hairline */}
+              <div className="pointer-events-none absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+
+              <h2 className="relative font-display text-4xl leading-[1.1] tracking-[-1px] text-on-dark md:text-5xl">
+                The next chapter of Indian storytelling is{" "}
+                <em className="text-sunshine-500">yours.</em>
+              </h2>
+              <p className="relative mx-auto mt-4 max-w-[52ch] text-lg text-cream/75">
+                From rickshaw drivers to film studios, AumicFlow meets every
+                storyteller at their specific pain point.
+              </p>
+              <div className="relative mt-8 flex flex-wrap justify-center gap-3">
+                <GlassButton href="/contact">Join the beta</GlassButton>
+                <GlassButton href="/pricing" variant="ghost">
+                  See pricing
+                </GlassButton>
               </div>
             </div>
           </FadeUp>
