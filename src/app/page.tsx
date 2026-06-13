@@ -123,7 +123,7 @@ export default function Home() {
             <FadeUp delay={0.5} y={20}>
               <p className="mt-6 max-w-[52ch] text-lg leading-relaxed text-ink-tint">
                 ONE is a Cultural Intelligence engine that understands rasa,
-                dialect, and the emotional rhythm of Indian storytelling — built
+                dialect, and the emotional rhythm of Indian storytelling, built
                 for the 500 million people existing AI ignores.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">

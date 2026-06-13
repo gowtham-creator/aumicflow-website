@@ -88,7 +88,7 @@ export function ProductBg() {
       <div className="absolute inset-0" style={{ background: P.productTint }} />
       <motion.svg
         viewBox="-160 -160 320 320"
-        className="absolute left-1/2 top-1/2 h-[155%] w-auto -translate-x-1/2 -translate-y-1/2"
+        className="absolute left-1/2 top-[64%] h-[120%] w-auto -translate-x-1/2 -translate-y-1/2 opacity-40 lg:top-1/2 lg:h-[155%] lg:opacity-100"
         animate={{ rotate: 360 }}
         transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
       >

@@ -7,7 +7,7 @@ import { FadeUp, Stagger, Item, HoverLift } from "@/components/motion";
 export const metadata: Metadata = {
   title: "Solutions — Who We Serve | AumicFlow",
   description:
-    "From rickshaw drivers to film studios — AumicFlow meets every storyteller at their specific pain point.",
+    "From rickshaw drivers to film studios, AumicFlow meets every storyteller at their specific pain point.",
 };
 
 const segments = [
@@ -113,7 +113,7 @@ export default function SolutionsPage() {
               Who we <em className="text-primary">serve.</em>
             </h1>
             <p className="mt-6 text-lg text-ink-tint leading-relaxed max-w-[58ch]">
-              From rickshaw drivers to film studios — AumicFlow meets every
+              From rickshaw drivers to film studios, AumicFlow meets every
               storyteller at their specific pain point.
             </p>
           </FadeUp>

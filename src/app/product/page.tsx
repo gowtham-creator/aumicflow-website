@@ -118,8 +118,8 @@ export default function ProductPage() {
             <p className="mt-6 text-lg text-ink-tint leading-relaxed max-w-[58ch]">
               Aumic doesn't just hear your audio. It hears your intent, your
               emotion, your frustration. A multilingual AI system that
-              understands and processes Indian languages — and Indian
-              feelings — seamlessly.
+              understands and processes Indian languages, and Indian
+              feelings, seamlessly.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link

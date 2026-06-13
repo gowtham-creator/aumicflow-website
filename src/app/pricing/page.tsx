@@ -112,7 +112,7 @@ export default function PricingPage() {
               Four tiers. <em className="text-primary">Every storyteller.</em>
             </h1>
             <p className="mt-6 text-lg text-ink-tint leading-relaxed max-w-[56ch]">
-              Designed for every stage — from students to enterprise
+              Designed for every stage, from students to enterprise
               production houses.
             </p>
           </FadeUp>

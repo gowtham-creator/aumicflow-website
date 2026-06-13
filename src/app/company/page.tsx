@@ -108,7 +108,7 @@ export default function CompanyPage() {
             </Badge>
             <p className="font-display text-3xl md:text-4xl leading-[1.3] text-ink-tint">
               <em className="text-primary">India</em> has{" "}
-              <span className="text-ink">millions of stories</span> — the{" "}
+              <span className="text-ink">millions of stories:</span> the{" "}
               <em>chai wala's struggle</em>, the{" "}
               <em>mother's silent pain</em>, the <em>everyday hero</em> no one
               notices. It's not about perfect English or fancy words. It's
